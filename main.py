@@ -12,8 +12,6 @@ IMPORT_KEYWORDS = (
 )
 
 
-
-
 class ImportAnalyzer(object):
 
 	def __init__(self, verbosity=1):
@@ -23,6 +21,8 @@ class ImportAnalyzer(object):
 
 
 	def run(self, root):
+		if not os.path.isdir(root):
+			raise Exception("%s doesn't exist." % root)
 		self.check_files(root)
 
 	def show_occurance_count(self):
@@ -80,7 +80,7 @@ class ImportAnalyzer(object):
 			if not eating:
 				for kw in IMPORT_KEYWORDS:
 					l = len(kw)
-					if line[current_pos:l + 1] == '%s ' % kw:
+					if line[current_pos:l] == kw:
 						eating = True
 						current_pos += l
 
@@ -103,8 +103,8 @@ if __name__ == '__main__':
 
 	(options, args) = parser.parse_args()
 
-	# if not root:
-		# print 'Please'
+	if not options.root:
+		print 'Need to specify a -r/--root.'
 
 	ia = ImportAnalyzer(options.verbosity)
 	ia.run(options.root)
