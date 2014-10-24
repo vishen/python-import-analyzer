@@ -21,9 +21,13 @@ class ImportAnalyzer(object):
 
 
 	def run(self, root):
-		if not os.path.isdir(root):
+		if os.path.isdir(root):
+			self.check_files(root)
+		elif os.path.exists(root):
+			self.check_file(root)
+
+		else:
 			raise Exception("%s doesn't exist." % root)
-		self.check_files(root)
 
 	def show_occurance_count(self):
 		for k, values in self.found.iteritems():
@@ -95,7 +99,7 @@ if __name__ == '__main__':
 
 	parser = OptionParser()
 	parser.add_option("-r", "--root", dest="root",
-	                  help="Analyze python imports for directory ROOT", metavar="ROOT")
+	                  help="Analyze python imports for directory/file ROOT", metavar="ROOT")
 
 	parser.add_option("-v", "--verbosity", dest="verbosity", default=1,
 	                  help="Set vebosity")
@@ -104,12 +108,14 @@ if __name__ == '__main__':
 	(options, args) = parser.parse_args()
 
 	if not options.root:
-		print 'Need to specify a -r/--root.'
+		print 'Need to specify a -r/--root'
+		
+	else:
 
-	ia = ImportAnalyzer(options.verbosity)
-	ia.run(options.root)
+		ia = ImportAnalyzer(options.verbosity)
+		ia.run(options.root or options.file)
 
-	ia.show_occurance_count()
+		ia.show_occurance_count()
 
  
 
