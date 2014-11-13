@@ -14,6 +14,6 @@ from datetime import date
 Will return
 ```
 os, 1
-re, 1
+re, 2
 datetime, 1
 ```
